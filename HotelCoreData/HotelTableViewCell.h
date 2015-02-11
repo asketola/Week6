@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  HotelTableViewCell.h
 //  HotelCoreData
 //
 //  Created by Annemarie Ketola on 2/9/15.
@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
-
+@interface HotelTableViewCell : UITableViewCell
 
 @end
-

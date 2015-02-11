@@ -1,16 +1,13 @@
 //
-//  ViewController.h
+//  GuestsViewController.h
 //  HotelCoreData
 //
 //  Created by Annemarie Ketola on 2/9/15.
 //  Copyright (c) 2015 Up Early, LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ViewController.h"
 
-@interface ViewController : UIViewController
-
-
+@interface GuestsViewController : ViewController
 
 @end
-
