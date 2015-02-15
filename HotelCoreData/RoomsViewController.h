@@ -10,6 +10,6 @@
 #import "Hotel.h"
 
 @interface RoomsViewController : UIViewController
-@property (strong, nonatomic) Hotel *selectedHotel;
+@property (strong, nonatomic) Hotel *selectedHotel;                            // <- variable that was passed from the HotelListViewController
 
 @end

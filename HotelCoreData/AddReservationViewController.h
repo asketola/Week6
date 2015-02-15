@@ -6,11 +6,10 @@
 //  Copyright (c) 2015 Up Early, LLC. All rights reserved.
 //
 
-#import "ViewController.h"
 #import <UIKit/UIKit.h>
 #import "Room.h"
 
-@interface AddReservationViewController : ViewController
-@property (strong, nonatomic) Room *selectedRoom;
+@interface AddReservationViewController : UIViewController
+@property (strong, nonatomic) Room *selectedRoom;                            // <- variable that was passed from the RoomsViewController
 
 @end

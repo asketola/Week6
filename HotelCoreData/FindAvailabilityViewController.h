@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Up Early, LLC. All rights reserved.
 //
 
-#import "ViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface FindAvailabilityViewController : ViewController
+@interface FindAvailabilityViewController : UIViewController
 
 @end

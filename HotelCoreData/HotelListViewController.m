@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "Hotel.h"
 #import "RoomsViewController.h"
+#import "HotelService.h"
 
 @interface HotelListViewController () <UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *hotelTableView;
@@ -21,30 +22,36 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-  self.hotelTableView.dataSource = self;
-  AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-  NSManagedObjectContext *context = appDelegate.managedObjectContext;
+  self.hotelTableView.dataSource = self;                                   // <- for the tableViewDataSource requirements
+// Delegate code prior to CoreDataStack input
+//  AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+//  NSManagedObjectContext *context = appDelegate.managedObjectContext;
+//  NSFetchRequest *fetchRequest = [MOM fetchRequestTemplateForName:@"HotelFetch"];
   
-  NSFetchRequest *fetchHotelRequest = [[NSFetchRequest alloc] initWithEntityName:@"Hotel"];
   
+// ******************* Find Hotels *******************
+  NSFetchRequest *fetchHotelRequest = [[NSFetchRequest alloc] initWithEntityName:@"Hotel"];  // initialize the fetch
   NSError *fetchHotelError;
-  
-  NSArray *hotelResults = [context executeFetchRequest:fetchHotelRequest error:&fetchHotelError];
-  if (!fetchHotelError) {
-    self.hotelsArray = hotelResults;
-    [self.hotelTableView reloadData];
+//  NSArray *hotelResults = [context executeFetchRequest:fetchHotelRequest error:&fetchHotelError];
+  NSArray *hotelResults = [[[HotelService sharedService] coreDataStack].managedObjectContext executeFetchRequest:fetchHotelRequest error:&fetchHotelError];                                                      // makes an array to store the results from the HotelService singleton
+  if (!fetchHotelError) {                                                  // <- if there is no error
+    self.hotelsArray = hotelResults;                                       // <- store the results in the global variables hotelsArray
+    [self.hotelTableView reloadData];                                      // <- display on the tableView
+    NSLog(@"hotelsArray: %@", self.hotelsArray);
   }
-    // Do any additional setup after loading the view.
-}
+} // <- close ViewDidLoad
 
+
+// ******************* How many cells to draw *******************
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  if (self.hotelsArray) {
-    return self.hotelsArray.count;
+  if (self.hotelsArray) {                                                  // <- check to make sure a hotelsArray was created
+    return self.hotelsArray.count;                                         // <- if so, find its count
   } else {
-    return 0;
+    return 0;                                                              // <- otherwise return zero
   }
 }
 
+// ******************* What to draw in the cells *******************
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HOTEL_CELL" forIndexPath:indexPath];
   Hotel *hotel = self.hotelsArray[indexPath.row];
@@ -52,29 +59,16 @@
   return cell;
 }
 
+// ******************* What to send to the next screen *******************
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  if ([segue.identifier isEqualToString:@"SHOW_ROOMS"]) {
-    RoomsViewController *destinationVC = segue.destinationViewController;
-    NSIndexPath *indexPath = self.hotelTableView.indexPathForSelectedRow;
+  if ([segue.identifier isEqualToString:@"SHOW_ROOMS"]) {                  // <- make sure its the correct segue
+    RoomsViewController *destinationVC = segue.destinationViewController;  // <- define the next view controller
+    NSIndexPath *indexPath = self.hotelTableView.indexPathForSelectedRow;  // <- define which hotel was tapped
     Hotel *hotel = self.hotelsArray[indexPath.row];
-    destinationVC.selectedHotel = hotel;
+    destinationVC.selectedHotel = hotel;                                   // <- send selectedHotel variable over to the next viewController
+    NSLog(@"selectedHotel: %@", hotel);
   }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-  
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
